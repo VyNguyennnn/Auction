@@ -1,0 +1,406 @@
+{% extends "website/base.html" %}
+{% load static %}
+{% block title %}
+    <title>Thông tin cá nhân</title>
+{% endblock %}
+
+{% block stylesheet %}
+    <!-- dropzone CSS
+	============================================ -->
+    <link rel="stylesheet" href="{% static 'admin/css/dropzone/dropzone.css' %}">
+
+    <!-- upload_img CSS
+	============================================ -->
+    <link rel="stylesheet" href="{% static 'admin/css/upload_image.css' %}">
+
+{% endblock %}
+
+
+{% block search %}
+    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="breadcome-heading">
+            <form role="search" class="sr-input-func">
+<!--                <input type="text" placeholder="Search..." class="search-int form-control">-->
+<!--                <a href="#"><i class="fa fa-search"></i></a>-->
+            </form>
+        </div>
+    </div>
+{% endblock %}
+    {% block link %}
+    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <ul class="breadcome-menu">
+            <li><a href="/home">Trang chủ</a> <span class="bread-slash">/</span>
+            </li>
+            <li><span class="bread-blod">Thông tin cá nhân</span>
+            </li>
+        </ul>
+    </div>
+    {% endblock %}
+
+{% block content %}
+        <div class="single-pro-review-area mt-t-30 mg-b-15">
+            <div class="alert alert-success" role="alert" id="message" style="display: none;">
+                 <strong>Thành công!</strong> Thông tin đã được cập nhật.
+            </div>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="product-payment-inner-st">
+                            <ul id="myTabedu1" class="tab-review-design">
+                                <li class="active"><a href="#description"> Thông tin cá nhân </a></li>
+                            </ul>
+                            <div id="myTabContent" class="tab-content custom-product-edit">
+                                <div class="product-tab-list tab-pane fade active in" id="description">
+                                    <div class="row">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <div class="review-content-section">
+                                                <div id="dropzone1" class="pro-ad">
+                                                    <form method="post" enctype="multipart/form-data" class="dropzone dropzone-custom needsclick add-professors" id="btn-update">
+                                                        {% csrf_token %}
+                                                        <div class="row">
+                                                          <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                                <div class="form-group uploader" style="height: 290px;">
+                                                                    {{ form.image }}
+                                                                    <label for="id_image" class="modal-body file-upload" id="file-drag">
+                                                                        <img id="file-image" {% if img_url is None %} src="#" class="hidden" {% elif img_url != None %} src="{{ img_url }}"
+                                                                             {% endif %} alt="Preview">
+
+                                                                        <div id="start" {% if img_url is not None %} class="hidden" {% endif %} >
+                                                                           <i class="fa fa-download" aria-hidden="true"></i>
+                                                                           <div>Vui lòng chọn ảnh</div>
+                                                                           <div id="notimage">(Không có ảnh hiện thị)</div>
+<!--                                                                           <span id="file-upload-btn" class="btn">Tải ảnh</span>-->
+                                                                        </div>
+                                                                   </label>
+                                                                </div>
+                                                          </div>
+                                                          <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+<!--                                                                <div class="form-group">-->
+<!--                                                                    {{ form.id }}-->
+<!--                                                                </div>-->
+                                                                <div class="form-group">
+                                                                    {{ form.email }}
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    {{ form.phonenb }}
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    {{ form.address }}
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    {{ form.city }}
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    {{ form.district }}
+                                                                </div>
+                                                                <input class="billing_address_2" id="usr" type="hidden" value="{{ u|safe }}">
+                                                                <input class="billing_address_1" name="" type="hidden" value="">
+                                                                <input class="billing_address_2" name="" type="hidden" value="">
+                                                          </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-lg-12">
+                                                                <div class="payment-adress">
+                                                                    <button type="submit" class="btn btn-primary waves-effect waves-light">Cập nhật</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+<!--        <div class="footer-copyright-area">-->
+<!--            <div class="container-fluid">-->
+<!--                <div class="row">-->
+<!--                    <div class="col-lg-12">-->
+<!--                        <div class="footer-copy-right">-->
+<!--                            <p>Copyright © 2018. All rights reserved. Template by <a href="https://colorlib.com/wp/templates/">Colorlib</a></p>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+{% endblock %}
+
+
+{% block javascript %}
+
+<!-- dictrict
+		============================================ -->
+    <script src="{% static 'admin/js/district.min.js' %}"></script>
+
+<script>
+var dict = [];
+$(document).ready(function(){
+    var usr = {{ user|safe }};
+    dict.push(usr);
+    $("#id_account").val(dict[0]['_id']);
+    $("#id_email").val(dict[0]['email']);
+    $("#id_address").val(dict[0]['address']);
+    $("#id_city").val(dict[0]['city']);
+    $("#id_phonenb").val(dict[0]['phonenb']);
+    localStorage.setItem('address_1_saved', dict[0]['city']);
+    $("#id_district").append($('<option selected="selected"></option>').val(dict[0]['district']).html(dict[0]['district']));
+
+});
+</script>
+<script>
+//<![CDATA[
+if (address_2 = localStorage.getItem('address_2_saved')) {
+  $('select[name="calc_shipping_district"] option').each(function() {
+    if ($(this).text() == address_2) {
+      $(this).attr('selected', '');
+    }
+  })
+  $('input.billing_address_2').attr('value', address_2);
+}
+if (district = localStorage.getItem('district')) {
+  $('select[name="district"]').html(district);
+  $('select[name="district"]').on('change', function() {
+    var target = $(this).children('option:selected');
+    target.attr('selected', '');
+    $('select[name="district"] option').not(target).removeAttr('selected');
+    address_2 = target.text();
+    $('input.billing_address_2').attr('value', address_2);
+    district = $('select[name="district"]').html();
+    localStorage.setItem('district', district);
+    localStorage.setItem('address_2_saved', address_2);
+  })
+}
+$('select[name="city"]').each(function() {
+  var $this = $(this),
+    stc = '';
+  c.forEach(function(i, e) {
+    e += +1;
+    stc += '<option value="' + i + '">' + i + '</option>';
+    $this.html('<option value="">Tỉnh / Thành phố</option>' + stc);
+    if (address_1 = localStorage.getItem('address_1_saved')) {
+      $('select[name="city"] option').each(function() {
+        if ($(this).text() == address_1) {
+          $(this).attr('selected', '');
+        }
+      })
+      $('input.billing_address_1').attr('value', address_1);
+    }
+    $this.on('change', function(i) {
+      i = $this.children('option:selected').index() - 1;
+      var str = '';
+      r = $this.val();
+      if (r != '') {
+        arr[i].forEach(function(el) {
+          str += '<option value="' + el + '">' + el + '</option>';
+          $('select[name="district"]').html('<option value="">Quận / Huyện</option>' + str);
+        })
+        var address_1 = $this.children('option:selected').text();
+        var district = $('select[name="district"]').html();
+        localStorage.setItem('address_1_saved', address_1);
+        localStorage.setItem('district', district);
+        $('select[name="district"]').on('change', function() {
+          var target = $(this).children('option:selected');
+          target.attr('selected', '');
+          $('select[name="_district"] option').not(target).removeAttr('selected');
+          var address_2 = target.text();
+          $('input.billing_address_2').attr('value', address_2);
+          district = $('select[name="district"]').html();
+          localStorage.setItem('district', district);
+          localStorage.setItem('address_2_saved', address_2);
+        })
+      } else {
+        $('select[name="district"]').html('<option value="">Quận / Huyện</option>');
+        district = $('select[name="district"]').html();
+        localStorage.setItem('district', district);
+        localStorage.removeItem('address_1_saved', address_1);
+      }
+    })
+  })
+})
+//]]>
+</script>
+<script>
+   $('#btn-update').on('submit',function someFunction(e){
+       e.preventDefault();
+<!--       var serializedData = $(this).serialize();-->
+       var form = $(this)[0];
+       var dt = new FormData(form);
+       $.ajax({
+               type: 'POST',
+               url: "/usr/0/information/update",
+<!--               data: serializedData,-->
+               data: dt,
+               cache: false,
+               processData: false,
+               contentType: false,
+               success: function (response) {
+                  $("#message").show();
+               },
+               error: function (response) {
+<!--                  console.log(response)-->
+               }
+        });
+    });
+</script>
+<script>
+var preview = document.getElementById("file-ip-1-preview");
+$('#id_image').on('click',function (event){
+    if(event.target.files.length > 0){
+    var src = URL.createObjectURL(event.target.files[0]);
+    var element = document.getElementById("ll");
+    element.remove();
+    preview.src = src;
+    preview.style.display = "block";
+   }
+  });
+</script>
+<script>
+    // File Upload
+//
+function ekUpload(){
+  function Init() {
+
+    console.log("Upload Initialised");
+
+    var fileSelect    = document.getElementById('id_image'),
+        fileDrag      = document.getElementById('file-drag'),
+        submitButton  = document.getElementById('submit-button');
+
+    fileSelect.addEventListener('change', fileSelectHandler, false);
+
+    // Is XHR2 available?
+    var xhr = new XMLHttpRequest();
+    if (xhr.upload) {
+      // File Drop
+      fileDrag.addEventListener('dragover', fileDragHover, false);
+      fileDrag.addEventListener('dragleave', fileDragHover, false);
+      fileDrag.addEventListener('drop', fileSelectHandler, false);
+    }
+  }
+
+  function fileDragHover(e) {
+    var fileDrag = document.getElementById('file-drag');
+
+    e.stopPropagation();
+    e.preventDefault();
+
+    fileDrag.className = (e.type === 'dragover' ? 'hover' : 'modal-body file-upload');
+  }
+
+  function fileSelectHandler(e) {
+    // Fetch FileList object
+    var files = e.target.files || e.dataTransfer.files;
+
+    // Cancel event and hover styling
+    fileDragHover(e);
+
+    // Process all File objects
+    for (var i = 0, f; f = files[i]; i++) {
+      parseFile(f);
+      uploadFile(f);
+    }
+  }
+
+  // Output
+  function output(msg) {
+    // Response
+<!--    var m = document.getElementById('messages');-->
+<!--    m.innerHTML = msg;-->
+  }
+
+  function parseFile(file) {
+
+    console.log(file.name);
+    output(
+      '<strong>' + encodeURI(file.name) + '</strong>'
+    );
+
+    // var fileType = file.type;
+    // console.log(fileType);
+    var imageName = file.name;
+
+    var isGood = (/\.(?=gif|jpg|png|jpeg)/gi).test(imageName);
+    if (isGood) {
+      document.getElementById('start').classList.add("hidden");
+<!--      document.getElementById('response').classList.remove("hidden");-->
+      document.getElementById('notimage').classList.add("hidden");
+      // Thumbnail Preview
+      document.getElementById('file-image').classList.remove("hidden");
+      document.getElementById('file-image').src = URL.createObjectURL(file);
+    }
+    else {
+      document.getElementById('file-image').classList.add("hidden");
+      document.getElementById('notimage').classList.remove("hidden");
+      document.getElementById('start').classList.remove("hidden");
+<!--      document.getElementById('response').classList.add("hidden");-->
+      document.getElementById("btn-update").reset();
+    }
+  }
+
+  function setProgressMaxValue(e) {
+<!--    var pBar = document.getElementById('file-progress');-->
+
+    if (e.lengthComputable) {
+      pBar.max = e.total;
+    }
+  }
+
+  function updateFileProgress(e) {
+<!--    var pBar = document.getElementById('file-progress');-->
+
+    if (e.lengthComputable) {
+      pBar.value = e.loaded;
+    }
+  }
+
+  function uploadFile(file) {
+
+    var xhr = new XMLHttpRequest(),
+      fileInput = document.getElementById('class-roster-file'),
+<!--      pBar = document.getElementById('file-progress'),-->
+      fileSizeLimit = 1024; // In MB
+    if (xhr.upload) {
+      // Check if file is less than x MB
+      if (file.size <= fileSizeLimit * 1024 * 1024) {
+        // Progress bar
+        pBar.style.display = 'inline';
+        xhr.upload.addEventListener('loadstart', setProgressMaxValue, false);
+<!--        xhr.upload.addEventListener('progress', updateFileProgress, false);-->
+
+        // File received / failed
+        xhr.onreadystatechange = function(e) {
+          if (xhr.readyState == 4) {
+            // Everything is good!
+
+<!--            // progress.className = (xhr.status == 200 ? "success" : "failure");-->
+            // document.location.reload(true);
+          }
+        };
+
+        // Start upload
+        xhr.open('POST', document.getElementById('btn-update').action, true);
+        xhr.setRequestHeader('X-File-Name', file.name);
+        xhr.setRequestHeader('X-File-Size', file.size);
+        xhr.setRequestHeader('Content-Type', 'multipart/form-data');
+        xhr.send(file);
+      } else {
+        output('Please upload a smaller file (< ' + fileSizeLimit + ' MB).');
+      }
+    }
+  }
+
+  // Check for the various File API support.
+  if (window.File && window.FileList && window.FileReader) {
+    Init();
+  } else {
+    document.getElementById('file-drag').style.display = 'none';
+  }
+}
+ekUpload();
+</script>
+{% endblock %}

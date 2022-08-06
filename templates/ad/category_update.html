@@ -1,0 +1,189 @@
+{% extends "ad/category_edit.html" %}
+{% load static %}
+{% block title %}
+    <title>Cập nhật danh mục</title>
+{% endblock %}
+{% block stylesheet%}
+   <!-- chosen CSS
+		============================================ -->
+    <link rel="stylesheet" href="{% static 'admin/css/chosen/bootstrap-chosen.css' %}">
+{% endblock %}
+{% block 'bl' %}
+    <div id="myTabContent" class="tab-content custom-product-edit">
+                                <div class="product-tab-list tab-pane fade active in" id="description">
+                                    <div class="row">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <div class="review-content-section">
+                                                <div id="dropzone1" class="pro-ad addcoursepro">
+                                                    <form method="post" id="update_form" class="dropzone dropzone-custom needsclick addlibrary">
+                                                        {% csrf_token %}
+                                                        <div class="row">
+                                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                <div class="form-group">
+                                                                    <label class="control-label">{{ form.category_parent.label }}</label>
+																    {{ form.category_parent }}
+                                                                    <input type="hidden" id="cate_parent" value="{{ cate.category_parent }}">
+															    </div>
+                                                                <div class="form-group">
+                                                                    <label class="control-label">{{ form.name.label }}</label>
+                                                                    {{ form.name }}
+                                                                    <input type="hidden" id="cate_name" value="{{ cate.name }}">
+                                                                    <input type="hidden" id="cate_id" value="{{ cate.id }}">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="product-tab-list tab-pane fade" id="reviews">
+                                    <div class="row">
+                                        <div class="add-product" style="float: right;">
+                                            <button data-toggle="tooltip" title="Thêm" class="pd-setting-ed add-attr-btn"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                                            <button data-toggle="tooltip" title="Lưu" class="pd-setting-ed save-attr-btn"><i class="fa fa-save" aria-hidden="true"></i></button>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <div class="review-content-section">
+                                                <div class="row">
+                                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                        <div class="form-group">
+                                                            <h4>{{ form_attribute.attribute_groups_id.label }}</h4>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                        <div class="form-group">
+                                                            <h4 class="control-label">{{ form_attribute.name.label }}</h4>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row" id="attr-form">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <div class="review-content-section">
+                                                {% if cate.attributes_id.0.id is None %}
+<!--                                                Danh mục không có thuộc tính.-->
+                                                <div class="row attr-form check" style="display: none;">
+                                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                        <div class="form-group">
+                                                           {{ form_attribute.attribute_groups_id }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
+                                                        <div class="form-group">
+                                                            {{ form.attributes_id }}
+                                                            <input type="hidden" class="cate_attr_id" value="0">
+                                                            <input type="hidden" class="cate_attr_gr_id" value="0">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-12">
+                                                        <div class="form-group">
+                                                            <button data-toggle="tooltip" title="Xóa" class="pd-setting-ed remove-attr-btn"><i class="fa fa-remove" aria-hidden="true"></i></button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                {% elif cate.attributes_id.0.id is not None %}
+                                                {% for c in cate.attributes_id %}
+                                                <div class="row attr-form check">
+                                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                        <div class="form-group">
+                                                           {{ form_attribute.attribute_groups_id }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
+                                                        <div class="form-group">
+                                                            {{ form.attributes_id }}
+                                                            <input type="hidden" class="cate_attr_id" value="{{ c.id}}">
+                                                            <input type="hidden" class="cate_attr_gr_id" value="{{ c.attribute_groups_id.id}}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-12">
+                                                        <div class="form-group">
+                                                            <button data-toggle="tooltip" title="Xóa" class="pd-setting-ed remove-attr-btn"><i class="fa fa-remove" aria-hidden="true"></i></button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                {% endfor %}
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+    </div>
+{% endblock %}
+
+{% block save-btn %}
+<script src="{% static 'admin/js/dropzone/dropzone.js' %}"></script>
+<!-- chosen JS
+		============================================ -->
+    <script src="{% static 'admin/js/chosen/chosen.jquery.js' %}"></script>
+    <script src="{% static 'admin/js/chosen/chosen-active.js' %}"></script>
+<!--    &lt;!&ndash; Select2 CSS &ndash;&gt;-->
+<!--<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />-->
+
+<!-- jQuery --> <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<!--&lt;!&ndash; Select2 JS &ndash;&gt;-->
+<!--<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>-->
+
+<script>
+    $(document).ready(function(){
+        $(".t").attr('disabled', 'disabled');
+        $("#id_name").val($("#cate_name").val());
+        $("#id_category_parent").val($("#cate_parent").val());
+        var attributes_id = $(".cate_attr_id");
+        var attributes_gr_id = $(".cate_attr_gr_id");
+        var select_att = $(".tt");
+        var select_gr = $(".t");
+        for (i = 0; i < attributes_id.length; i++) {
+          select_att.eq(i).val(attributes_id.eq(i).val()).change();
+          select_gr.eq(i).val(attributes_gr_id.eq(i).val()).change();
+       }
+       $("#id_category_parent").attr('disabled', 'disabled');
+    });
+</script>
+<script>
+     $(document).on('click','.save-attr-btn', function someFunction(e){
+       e.preventDefault();
+       values = [];
+       var select = document.getElementsByClassName("form-control tt");
+       for (let i = 0; i < select.length; i++) {
+              values.push(select[i].value);
+       }
+       var check = 'False';
+       if ($(".check").css('display') != 'none'){
+          check = 'True';
+       }
+       $.ajax({
+               type: 'POST',
+               url: "/admin/category/update=" + $("#cate_id").val(),
+               data: {
+                  csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                  id: 1,
+                  category_parent: $("#id_category_parent").val(),
+                  name: $("#id_name").val(),
+                  check_add_attr: check,
+                  attributes: values,
+                  attributes_id: 0,
+               },
+               success: function (response) {
+                  if(response['message'] == '') {
+                       alert('Cập nhật thành công!');
+                       $("#edit_form").load("/admin/category/update #update_form");
+                  }
+                  else {
+                     alert(response['message']);
+                  }
+               },
+               error: function (response) {
+                  console.log(response)
+               }
+       });
+     });
+    </script>
+{% endblock %}

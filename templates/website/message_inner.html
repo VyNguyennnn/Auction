@@ -1,0 +1,554 @@
+{% extends "website/base.html" %}
+{% load static %}
+{% load filter %}
+{% block title %}
+    <title>Thông tin cá nhân</title>
+{% endblock %}
+
+{% block stylesheet %}
+    <!-- dropzone CSS
+	============================================ -->
+<!--    <link rel="stylesheet" href="{% static 'admin/css/dropzone/dropzone.css' %}">-->
+
+    <!-- upload_img CSS
+	============================================ -->
+    <link rel="stylesheet" href="{% static 'admin/css/upload_image.css' %}">
+    <style>
+        .container {
+  padding:0;
+  background-color: #FFF;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+  height: 700px;
+}
+
+/* ===== MENU ===== */
+.menu {
+  float: left;
+  height: 700px;;
+  width: 70px;
+  background: #4768b5;
+  background: -webkit-linear-gradient(#4768b5, #35488e);
+  background: -o-linear-gradient(#4768b5, #35488e);
+  background: -moz-linear-gradient(#4768b5, #35488e);
+  background: linear-gradient(#4768b5, #35488e);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19);
+}
+
+.menu .items {
+  list-style:none;
+  margin: auto;
+  padding: 0;
+}
+
+.menu .items .item {
+  height: 70px;
+  border-bottom: 1px solid #6780cc;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  color: #9fb5ef;
+  font-size: 17pt;
+}
+
+.menu .items .item-active {
+  background-color:#5172c3;
+  color: #FFF;
+}
+
+.menu .items .item:hover {
+  cursor: pointer;
+  background-color: #4f6ebd;
+  color: #cfe5ff;
+}
+
+/* === CONVERSATIONS === */
+
+.discussions {
+  width: 35%;
+  height: 700px;
+  box-shadow: 0px 8px 10px rgba(0,0,0,0.20);
+  overflow: hidden;
+  background-color: #87a3ec;
+  display: inline-block;
+}
+
+.discussions .discussion {
+  width: 100%;
+  height: 90px;
+  background-color: #FAFAFA;
+  border-bottom: solid 1px #E0E0E0;
+  display:flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.discussions .search {
+  display:flex;
+  align-items: center;
+  justify-content: center;
+  color: #E0E0E0;
+}
+
+.discussions .search .searchbar {
+  height: 40px;
+  background-color: #FFF;
+  width: 70%;
+  padding: 0 20px;
+  border-radius: 50px;
+  border: 1px solid #EEEEEE;
+  display:flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.discussions .search .searchbar input {
+  margin-left: 15px;
+  height:38px;
+  width:100%;
+  border:none;
+  font-family: 'Montserrat', sans-serif;;
+}
+
+.discussions .search .searchbar *::-webkit-input-placeholder {
+    color: #E0E0E0;
+}
+.discussions .search .searchbar input *:-moz-placeholder {
+    color: #E0E0E0;
+}
+.discussions .search .searchbar input *::-moz-placeholder {
+    color: #E0E0E0;
+}
+.discussions .search .searchbar input *:-ms-input-placeholder {
+    color: #E0E0E0;
+}
+
+.discussions .message-active {
+  width: 98.5%;
+  height: 90px;
+  background-color: #FFF;
+  border-bottom: solid 1px #E0E0E0;
+}
+
+.discussions .discussion .photo {
+    margin-left:20px;
+    display: block;
+    width: 45px;
+    height: 45px;
+    background: #E6E7ED;
+    -moz-border-radius: 50px;
+    -webkit-border-radius: 50px;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.online {
+  position: relative;
+  top: 30px;
+  left: 35px;
+  width: 13px;
+  height: 13px;
+  background-color: #8BC34A;
+  border-radius: 13px;
+  border: 3px solid #FAFAFA;
+}
+
+.desc-contact {
+  height: 43px;
+  width:50%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.discussions .discussion .name {
+  margin: 0 0 0 20px;
+  font-family:'Montserrat', sans-serif;
+  font-size: 11pt;
+  color:#515151;
+}
+
+.discussions .discussion .message {
+  margin: 6px 0 0 20px;
+  font-family:'Montserrat', sans-serif;
+  font-size: 9pt;
+  color:#515151;
+}
+
+.timer {
+  margin-left: 15%;
+  font-family:'Open Sans', sans-serif;
+  font-size: 11px;
+  padding: 3px 8px;
+  color: #BBB;
+  background-color: #FFF;
+  border: 1px solid #E5E5E5;
+  border-radius: 15px;
+}
+
+.chat {
+  width: calc(65% - 85px);
+}
+
+.header-chat {
+  background-color: #FFF;
+  height: 90px;
+  box-shadow: 0px 3px 2px rgba(0,0,0,0.100);
+  display:flex;
+  align-items: center;
+}
+
+.chat .header-chat .icon {
+  margin-left: 30px;
+  color:#515151;
+  font-size: 14pt;
+}
+
+.chat .header-chat .name {
+  margin: 0 0 0 20px;
+  text-transform: uppercase;
+  font-family:'Montserrat', sans-serif;
+  font-size: 13pt;
+  color:#515151;
+}
+
+.chat .header-chat .right {
+  position: absolute;
+  right: 40px;
+}
+
+.chat .messages-chat {
+  padding: 25px 35px;
+}
+
+.chat .messages-chat .message {
+  display:flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.chat .messages-chat .message .photo {
+    display: block;
+    width: 45px;
+    height: 45px;
+    background: #E6E7ED;
+    -moz-border-radius: 50px;
+    -webkit-border-radius: 50px;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.chat .messages-chat .text {
+  margin: 0 35px;
+  background-color: #f6f6f6;
+  padding: 15px;
+  border-radius: 12px;
+}
+
+.text-only {
+  margin-left: 45px;
+}
+
+.time {
+  font-size: 10px;
+  color:lightgrey;
+  margin-bottom:10px;
+  margin-left: 85px;
+}
+
+.response-time {
+  float: right;
+  margin-right: 40px !important;
+}
+
+.response {
+  float: right;
+  margin-right: 0px !important;
+  margin-left:auto; /* flexbox alignment rule */
+}
+
+.response .text {
+  background-color: #e3effd !important;
+}
+
+.footer-chat {
+  width: calc(65% - 66px);
+  height: 80px;
+  display:flex;
+  align-items: center;
+  position:absolute;
+  bottom: 0;
+  background-color: transparent;
+  border-top: 2px solid #EEE;
+
+}
+
+.chat .footer-chat .icon {
+  margin-left: 30px;
+  color:#C0C0C0;
+  font-size: 14pt;
+}
+
+.chat .footer-chat .send {
+  color:#fff;
+  background-color: #4f6ebd;
+  position: absolute;
+  right: 50px;
+  padding: 12px 12px 12px 12px;
+  border-radius: 50px;
+  font-size: 14pt;
+}
+
+.chat .footer-chat .name {
+  margin: 0 0 0 20px;
+  text-transform: uppercase;
+  font-family:'Montserrat', sans-serif;
+  font-size: 13pt;
+  color:#515151;
+}
+
+.chat .footer-chat .right {
+  position: absolute;
+  right: 40px;
+}
+
+.write-message {
+  border:none !important;
+  width:60%;
+  height: 50px;
+  margin-left: 20px;
+  padding: 10px;
+}
+
+.footer-chat *::-webkit-input-placeholder {
+  color: #C0C0C0;
+  font-size: 13pt;
+}
+.footer-chat input *:-moz-placeholder {
+  color: #C0C0C0;
+  font-size: 13pt;
+}
+.footer-chat input *::-moz-placeholder {
+  color: #C0C0C0;
+  font-size: 13pt;
+  margin-left:5px;
+}
+.footer-chat input *:-ms-input-placeholder {
+  color: #C0C0C0;
+  font-size: 13pt;
+}
+
+.clickable {
+  cursor: pointer;
+}
+    </style>
+
+{% endblock %}
+
+{% block breadcome-area %}
+{% endblock %}
+
+{% block content %}
+        <div class="single-pro-review-area mt-t-30 mg-b-15" style="padding-top: 100px;">
+            <div class="alert alert-success" role="alert" id="message" style="display: none;">
+                 <strong>Thành công!</strong> Thông tin đã được cập nhật.
+            </div>
+            <div class="container">
+    <div class="row">
+      <nav class="menu">
+        <ul class="items">
+          <li class="item">
+            <i class="fa fa-home" aria-hidden="true"></i>
+          </li>
+          <li class="item">
+            <i class="fa fa-user" aria-hidden="true"></i>
+          </li>
+          <li class="item">
+            <i class="fa fa-pencil" aria-hidden="true"></i>
+          </li>
+          <li class="item item-active">
+            <i class="fa fa-commenting" aria-hidden="true"></i>
+          </li>
+          <li class="item">
+            <i class="fa fa-file" aria-hidden="true"></i>
+          </li>
+          <li class="item">
+            <i class="fa fa-cog" aria-hidden="true"></i>
+          </li>
+        </ul>
+      </nav>
+      <section class="discussions">
+<!--        <div class="discussion search">-->
+<!--          <div class="searchbar">-->
+<!--            <i class="fa fa-search" aria-hidden="true"></i>-->
+<!--            <input type="text" placeholder="Search..."></input>-->
+<!--          </div>-->
+<!--        </div>-->
+        {% for i in chat_room %}
+          <div class="discussion">
+          <div class="photo" style="background-image: url({{i.user.img_url}})">
+<!--            <div class="online"></div>-->
+          </div>
+          <div class="desc-contact">
+            <input type="hidden" value="{{i.pk}}">
+            <p class="name" id="user_id">{{i.user.id}}</p>
+<!--            <p class="message">9 pm at the bar if possible 😳</p>-->
+          </div>
+<!--          <div class="timer">}12 sec</div>-->
+        </div>
+        {% endfor %}
+
+            <input type="hidden" id="room_id" value="{{room_id}}">
+      </section>
+      <section class="chat" id="chat" style="float: right;">
+        <div class="header-chat" id="header-chat">
+          <i class="icon fa fa-user-o" aria-hidden="true"></i>
+          <p class="name" id="chat_name"></p>
+<!--          <i class="icon clickable fa fa-ellipsis-h right" aria-hidden="true"></i>-->
+        </div>
+        <div class="messages-chat" id="messages-chat" style="width:680px; overflow-y:auto; position:relative; height: 460px;">
+         {% for r in history %}
+          {% ifchanged r.time|date:"d-m-Y" %}
+            <p style="margin: 50px; font-size: 15px; text-align: center;">----------{{r.time|date:"H:i d-m-Y"}}-----------</p>
+            {% if r.sender.pk != username %}
+               <div class="message">
+                  <div class="photo" style="background-image: url({{r.sender.img_url}});">
+<!--                     <div class="online"></div>-->
+                  </div>
+                   <p class="text">{{r.content}}</p>
+               </div>
+               {% if r.pk|later_value == 'show'%}
+               <p class="time"> {{r.time|covert_time}}</p>
+               {% endif %}
+             {% elif r.sender.pk == username %}
+               <div class="message text-only" style="margin-top: 40px;">
+                  <div class="response">
+                     <p class="text">{{r.content}}</p>
+                  </div>
+               </div>
+               {% if r.pk|later_value == 'show'%}
+               <p class="response-time time"> {{r.time|covert_time}}</p>
+               {% endif %}
+             {% endif %}
+            {% else %}
+            {% ifchanged r.sender.pk %}
+             {% if r.sender.pk != username %}
+               <div class="message">
+                  <div class="photo" style="background-image: url({{r.sender.img_url}});">
+<!--                     <div class="online"></div>-->
+                  </div>
+                   <p class="text">{{r.content}}</p>
+               </div>
+              {% if r.pk|later_value == 'show'%}
+               <p class="time"> {{r.time|covert_time}}</p>
+              {% endif %}
+             {% elif r.sender.pk == username %}
+               <div class="message text-only" style="margin-top: 40px;">
+                  <div class="response">
+                     <p class="text">{{r.content}}</p>
+                  </div>
+               </div>
+              {% if r.pk|later_value == 'show'%}
+               <p class="response-time time"> {{r.time|covert_time}}</p>
+              {% endif %}
+             {% endif %}
+            {% else %}
+             {% if r.sender.pk != username %}
+               <div class="message text-only">
+                   <p class="text">{{r.content}}</p>
+               </div>
+              {% if r.pk|later_value == 'show'%}
+               <p class="time"> {{r.time|covert_time}}</p>
+              {% endif %}
+             {% elif r.sender.pk == username %}
+               <div class="message text-only" style="margin-top: 40px;">
+                  <div class="response">
+                     <p class="text">{{r.content}}</p>
+                  </div>
+               </div>
+               {% if r.pk|later_value == 'show'%}
+               <p class="response-time time"> {{r.time|covert_time}}</p>
+               {% endif %}
+             {% endif %}
+            {% endifchanged %}
+            {% endifchanged %}
+
+         {% endfor %}
+<!--          <div class="message text-only">-->
+<!--            <p class="text"> What are you doing tonight ? Want to go take a drink ?</p>-->
+<!--          </div>-->
+<!--          <p class="time"> 14h58</p>-->
+<!--          <div class="message text-only">-->
+<!--            <div class="response">-->
+<!--              <p class="text"> Hey Megan ! It's been a while 😃</p>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div class="message text-only">-->
+<!--            <div class="response">-->
+<!--              <p class="text"> When can we meet ?</p>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <p class="response-time time"> 15h04</p>-->
+<!--          <div class="message">-->
+<!--            <div class="photo" style="background-image: url(https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80);">-->
+<!--              <div class="online"></div>-->
+<!--            </div>-->
+<!--            <p class="text"> 9 pm at the bar if possible 😳</p>-->
+<!--          </div>-->
+<!--          <p class="time"> 15h09</p>-->
+        </div>
+        <div class="footer-chat" style="width: 43%;">
+<!--          <i class="icon fa fa-smile-o clickable" style="font-size:25pt;" aria-hidden="true"></i>-->
+          <form id="form" method="post">
+            {% csrf_token %}
+            <input type="text" style="width: 300%;" name="message" class="write-message" placeholder="Type your message here"/>
+          </form>
+<!--          <i class="icon send fa fa-paper-plane-o clickable" aria-hidden="true"></i>-->
+        </div>
+      </section>
+    </div>
+  </div>
+        </div>
+{% endblock %}
+
+
+{% block javascript %}
+
+<!-- dictrict
+		============================================ -->
+    <script src="{% static 'admin/js/district.min.js' %}"></script>
+
+<script>
+      var id = $('#room_id').val();
+<!--      alert('web_inner');-->
+      let url = 'ws://'+ window.location.host +'/ws/chat/'+id+'/';
+<!--      alert(url);-->
+      var chatSocket = new WebSocket(url);
+
+      chatSocket.onmessage = function(e){
+          let data = JSON.parse(e.data);
+          console.log('Data:', data);
+
+          if(data.type === 'chat'){
+             let chat = document.getElementById('messages-chat');
+             let m = data.message;
+             let usr = data.usr;
+             chat.insertAdjacentHTML('beforeend', "<div class='message text-only'><p>"+usr+"</p><div class='response'><p class='text'>"+m+"</p></div></div>");
+             }
+      };
+      let form = document.getElementById('form');
+      form.addEventListener('submit', function(e){
+          e.preventDefault();
+          let message = e.target.message.value;
+
+          chatSocket.send(JSON.stringify({
+             'message': message,
+             'usr': 'tester',
+             'receiver': 'djdjd',
+             'room_id': 'test',
+          }));
+          form.reset();
+      });
+</script>
+{% endblock %}

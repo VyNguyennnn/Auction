@@ -1,0 +1,167 @@
+{% extends "website/base.html" %}
+{% load static %}
+{% block title %}
+    <title>Trang chủ</title>
+{% endblock %}
+
+{% block content %}
+<div class="courses-area">
+            <div class="container-fluid">
+                <div class="row" id="list-room">
+                    {% for r in room %}
+                    {% if r.status == 'opening' %}
+                    <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 room">
+                        <div class="courses-inner res-mg-t-30 dk-res-t-pro-30">
+                            <div class="courses-title">
+                                <a href="#"><img src="{{ r.product_id.image.0.url }}" alt=""></a>
+                                <h2>{{ r.product_id.name|truncatechars:40 }}</h2>
+                                <input type="hidden" id="room_name" value="{{ r.product_id.name }}">
+                            </div>
+                            <div class="course-des">
+                                <p><b>Curent bid:</b> {{ r.current_bid|add:"0" }} <u>đ</u> </p>
+                                <p><b>Bidders:</b> {{ r.quantity_of_bidder }} </p>
+                                <p class="timer"><span><i class="fa fa-clock"></i></span> </p>
+                                <input type="hidden" class="set-time" value="{{ r.end|date:'Y-m-d H:i' }}"/>
+                                <div id="countdown">
+                                    <div class='tiles color-full'></div>
+                                </div>
+                            </div>
+                            <div class="product-buttons">
+                                <form method="post">
+                                  {% csrf_token %}
+                                  <button type="button" class='btn-room' value="{{ r.pk }}" class="button-default cart-btn">Tham gia</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+{% endblock %}
+{% block javascript %}
+<script>
+<!--   console.log('done did the form Funct: ');-->
+    var slides= document.getElementsByClassName('set-time');
+    Array.prototype.forEach.call(slides, function(slide, index) {
+    var t = slides.item(index).value;
+    var tgianht = new Date().getTime();
+    var end = Date.parse(t);
+    var minutes = (end/60000) - (tgianht/ 60000);
+    var room= document.getElementsByClassName('btn-room')[index];
+    var id_room = room.value;
+
+<!--       var minutes = $( '#set-time' ).val();-->
+
+var target_date = new Date().getTime() + ((minutes * 60 ) * 1000); // set the countdown date
+var time_limit = ((minutes * 60 ) * 1000);
+//set actual timer
+setTimeout(
+  function ()
+  {
+    $.ajax({
+               type: 'POST',
+               url: "/set_status_room",
+               data: {
+                  csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                  id_room: id_room,
+               },
+               success: function (response) {
+<!--                   alert('skskss');-->
+               },
+               error: function (response) {
+                  console.log(response)
+               }
+    });
+  }, time_limit );
+
+var days, hours, minutes, seconds; // variables for time units
+
+<!--var v = slides.item(index).parentNode;-->
+var y = slides.item(index).closest('.course-des');
+<!--var timer = y.getElementsByClassName("timer");-->
+var timer = document.getElementsByClassName("timer")[index];
+
+<!--var countdown = y.getElementsByClassName("tiles"); // get tag element-->
+var countdown = document.getElementsByClassName("tiles")[index]; // get tag element
+
+getCountdown();
+
+setInterval(function () { getCountdown(); }, 1000);
+
+function getCountdown(){
+
+	// find the amount of "seconds" between now and target
+	var current_date = new Date().getTime();
+	var seconds_left = (target_date - current_date) / 1000;
+
+if ( seconds_left >= 0 ) {
+  console.log(time_limit);
+   if ( (seconds_left * 1000 ) < ( time_limit / 2 ) )  {
+     $( '.tiles' )[index].removeClass('color-full');
+     $( '.tiles' )[index].addClass('color-half');
+
+		}
+    if ( (seconds_left * 1000 ) < ( time_limit / 4 ) )  {
+    	$( '.tiles' )[index].removeClass('color-half');
+    	$( '.tiles' )[index].addClass('color-empty');
+    }
+	days = pad( parseInt(seconds_left / 86400) );
+	seconds_left = seconds_left % 86400;
+
+	hours = pad( parseInt(seconds_left / 3600) );
+	seconds_left = seconds_left % 3600;
+
+	minutes = pad( parseInt(seconds_left / 60) );
+	seconds = pad( parseInt( seconds_left % 60 ) );
+
+	// format countdown string + set tag value
+	if  (days != 00) {
+	   var c = "<span> " + days +" ngày, "+ hours + ":</span><span>" + minutes + ":</span><span>" + seconds + "</span>";
+	}
+	else
+	{
+	   var c = "<span> " + hours + ":</span><span>" + minutes + ":</span><span>" + seconds + "</span>";
+	}
+    timer.innerHTML = "<span><b>End:</b></span>" + c;
+
+
+}
+
+
+
+}
+
+function pad(n) {
+	return (n < 10 ? '0' : '') + n;
+}
+});
+
+
+   </script>
+<script>
+    $('.btn-room').on('click',function someFunction(e){
+       url = '/room/' + $(this).val();
+       location.replace(url);
+    });
+</script>
+<script>
+    $(document).on('click', '#click-search', function(e){
+        var list = $('.room');
+        list.each(function(e){
+          r = $(this).find('#room_name');
+          room_name = r.val()+'gi';
+          value = $('#search_room').val();
+             if (room_name.indexOf(value) == -1) {
+                $(this).css('display','none');
+             }
+             else {
+                $(this).css('display','block');
+             }
+
+       });
+    });
+
+</script>
+{% endblock %}

@@ -1,0 +1,231 @@
+{% extends "ad/base.html" %}
+{% load static %}
+<!doctype html>
+<html class="no-js" lang="en">
+
+
+{% block title %}
+    <title>Đăng ký</title>
+{% endblock %}
+
+{% block body %}
+<body>
+    <!--[if lt IE 8]>
+		<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+	<![endif]-->
+	<div class="error-pagewrap">
+		<div class="error-page-int">
+			<div class="text-center custom-login">
+				<h3>Đăng ký</h3>
+				<p>Hệ thống đấu giá sinh viên</p>
+			</div>
+			<div class="content-error">
+				<div class="hpanel">
+                    <div class="panel-body">
+                        <form action="/registration" id="signupForm" method="post">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="form-group col-lg-12">
+                                    <label>{{ form.id.label }}</label>
+                                    <p>{{ form.id }}</p>
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    <label>{{ form.password.label }}</label>
+                                    {{ form.password }}
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    <label>{{ form.auth_password.label }}</label>
+                                    {{ form.auth_password }}
+                                </div>
+                                <div class="form-group col-lg-12">
+                                    <label>{{ form.address.label }}</label>
+                                    {{ form.address }}
+                                </div>
+                                <div class="form-group col-lg-12" id="hh">
+                                    <label>{{ form.city.label }}</label>
+                                    {{ form.city }}
+                                </div>
+                                <div class="form-group col-lg-12">
+                                    <label>{{ form.district.label }}</label>
+                                    {{ form.district }}
+                                </div>
+                                <div class="form-group col-lg-12">
+                                    <label>{{ form.email.label }}</label>
+                                    <input type="hidden" value="{{ user.email }}" name="email" class="form-control" id="id_email">
+                                    {% if user.email == '' %}
+                                       <input type="text" class="form-control" disabled>
+                                    {% elif user.email != '' %}
+                                    <p>{{ user.email }}</p>
+                                    {% endif %}
+<!--                                    <p>{{ user.socialaccount_set.all.0.extra_data.name }}</p>-->
+<!--                                    <p>{{ user.socialaccount_set.all.0.extra_data.family_name }}</p>-->
+<!--                                    <p>{{ user.socialaccount_set.all.0.extra_data.given_name }}</p>-->
+                                </div>
+                                <input class="billing_address_1" name="" type="hidden" value="">
+                                <input class="billing_address_2" name="" type="hidden" value="">
+                            </div>
+                            <p id="message" class="help-block small" style="color: red;"> {{message}} </p>
+                            <div class="text-center">
+                                <button class="btn btn-success btn-block loginbtn" type="submit">Đăng ký</button>
+<!--                                <button class="btn btn-default">Thoát</button>-->
+                            </div>
+                        </form>
+                    </div>
+                </div>
+			</div>
+		</div>   
+    </div>
+    <!-- jquery
+		============================================ -->
+    <script src="{% static 'admin/js/vendor/jquery-1.12.4.min.js' %}"></script>
+    <!-- bootstrap JS
+		============================================ -->
+    <script src="{% static 'admin/js/bootstrap.min.js' %}"></script>
+    <!-- wow JS
+		============================================ -->
+    <script src="{% static 'admin/js/wow.min.js' %}"></script>
+    <!-- price-slider JS
+		============================================ -->
+    <script src="{% static 'admin/js/jquery-price-slider.js' %}"></script>
+    <!-- meanmenu JS
+		============================================ -->
+    <script src="{% static 'admin/js/jquery.meanmenu.js' %}"></script>
+    <!-- owl.carousel JS
+		============================================ -->
+    <script src="{% static 'admin/js/owl.carousel.min.js' %}"></script>
+    <!-- sticky JS
+		============================================ -->
+    <script src="{% static 'admin/js/jquery.sticky.js' %}"></script>
+    <!-- scrollUp JS
+		============================================ -->
+    <script src="{% static 'admin/js/jquery.scrollUp.min.js' %}"></script>
+    <!-- mCustomScrollbar JS
+		============================================ -->
+    <script src="{% static 'admin/js/scrollbar/jquery.mCustomScrollbar.concat.min.js' %}"></script>
+    <script src="{% static 'admin/js/scrollbar/mCustomScrollbar-active.js' %}"></script>
+    <!-- metisMenu JS
+		============================================ -->
+    <script src="{% static 'admin/js/metisMenu/metisMenu.min.js' %}"></script>
+    <script src="{% static 'admin/js/metisMenu/metisMenu-active.js' %}"></script>
+    <!-- tab JS
+		============================================ -->
+    <script src="js/tab.js"></script>
+    <!-- icheck JS
+		============================================ -->
+    <script src="{% static 'admin/js/icheck/icheck.min.js' %}"></script>
+    <script src="{% static 'admin/js/icheck/icheck-active.js' %}"></script>
+    <!-- plugins JS
+		============================================ -->
+    <script src="{% static 'admin/js/plugins.js' %}"></script>
+    <!-- main JS
+		============================================ -->
+    <script src="{% static 'admin/js/main.js' %}"></script>
+    <!-- tawk chat JS
+		============================================ -->
+<!--    <script src="js/tawk-chat.js"></script>-->
+    <!-- dictrict
+		============================================ -->
+    <script src="{% static 'admin/js/district.min.js' %}"></script>
+<script>
+$(document).ready(function(){
+<!--    alert($("#hh").html());-->
+    localStorage.setItem("district", "");
+});
+</script>
+<script>
+//<![CDATA[
+if (address_2 = localStorage.getItem('address_2_saved')) {
+  $('select[name="calc_shipping_district"] option').each(function() {
+    if ($(this).text() == address_2) {
+      $(this).attr('selected', '');
+    }
+  })
+  $('input.billing_address_2').attr('value', address_2);
+}
+if (district = localStorage.getItem('district')) {
+  $('select[name="district"]').html(district);
+  $('select[name="district"]').on('change', function() {
+    var target = $(this).children('option:selected');
+    target.attr('selected', '');
+    $('select[name="district"] option').not(target).removeAttr('selected');
+    address_2 = target.text();
+    $('input.billing_address_2').attr('value', address_2);
+    district = $('select[name="district"]').html();
+    localStorage.setItem('district', district);
+    localStorage.setItem('address_2_saved', address_2);
+  })
+}
+$('select[name="city"]').each(function() {
+  var $this = $(this),
+    stc = '';
+  c.forEach(function(i, e) {
+    e += +1;
+    stc += '<option value="' + i + '">' + i + '</option>';
+    $this.html('<option value="">Tỉnh / Thành phố</option>' + stc);
+    if (address_1 = localStorage.getItem('address_1_saved')) {
+      $('select[name="city"] option').each(function() {
+        if ($(this).text() == address_1) {
+          $(this).attr('selected', '');
+        }
+      })
+      $('input.billing_address_1').attr('value', address_1);
+    }
+    $this.on('change', function(i) {
+      i = $this.children('option:selected').index() - 1;
+      var str = '';
+      r = $this.val();
+      if (r != '') {
+        arr[i].forEach(function(el) {
+          str += '<option value="' + el + '">' + el + '</option>';
+          $('select[name="district"]').html('<option value="">Quận / Huyện</option>' + str);
+        })
+        var address_1 = $this.children('option:selected').text();
+        var district = $('select[name="district"]').html();
+        localStorage.setItem('address_1_saved', address_1);
+        localStorage.setItem('district', district);
+        $('select[name="district"]').on('change', function() {
+          var target = $(this).children('option:selected');
+          target.attr('selected', '');
+          $('select[name="_district"] option').not(target).removeAttr('selected');
+          var address_2 = target.text();
+          $('input.billing_address_2').attr('value', address_2);
+          district = $('select[name="district"]').html();
+          localStorage.setItem('district', district);
+          localStorage.setItem('address_2_saved', address_2);
+        })
+      } else {
+        $('select[name="district"]').html('<option value="">Quận / Huyện</option>');
+        district = $('select[name="district"]').html();
+        localStorage.setItem('district', district);
+        localStorage.removeItem('address_1_saved', address_1);
+      }
+    })
+  })
+})
+//]]>
+</script>
+<!--<script>-->
+<!--    $('#signupForm').on('submit',function someFunction(e){-->
+<!--       e.preventDefault();-->
+<!--       var form = $(this)[0];-->
+<!--       var dt = new FormData(form);-->
+<!--       $.ajax({-->
+<!--               type: 'POST',-->
+<!--               url: "/signup",-->
+<!--&lt;!&ndash;               data: serializedData,&ndash;&gt;-->
+<!--               data: dt,-->
+<!--               cache: false,-->
+<!--               processData: false,-->
+<!--               contentType: false,-->
+<!--               success: function (response) {-->
+<!--                  alert('okskks');-->
+<!--               },-->
+<!--               error: function (response) {-->
+<!--&lt;!&ndash;                  console.log(response)&ndash;&gt;-->
+<!--               }-->
+<!--        });-->
+<!--    });-->
+<!--</script>-->
+</body>
+{% endblock %}
+</html>

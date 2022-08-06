@@ -1,0 +1,305 @@
+{% extends "ad/base.html" %}
+{% load static %}
+{% block title %}
+    <title>Thêm danh mục</title>
+{% endblock %}
+{% block stylesheet%}
+   <!-- chosen CSS
+		============================================ -->
+    <link rel="stylesheet" href="{% static 'admin/css/chosen/bootstrap-chosen.css' %}">
+{% endblock %}
+
+{% block breadcome-area %}
+{% endblock %}
+
+{% block content %}
+        <div class="single-pro-review-area mt-t-30 mg-b-15" style="margin-top: 100px;">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="product-payment-inner-st">
+                            <ul id="myTabedu1" class="tab-review-design">
+                                <li class="active"><a href="#description"> Danh mục </a></li>
+                                <li><a href="#reviews"> Thuộc tính </a></li>
+<!--                                <li><a href="#INFORMATION">Social Information</a></li>-->
+                            </ul>
+                            {% block 'bl' %}
+                            <div id="myTabContent" class="tab-content custom-product-edit">
+                                <div class="product-tab-list tab-pane fade active in" id="description">
+                                    <div class="row">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <div class="review-content-section">
+                                                <div id="dropzone1" class="pro-ad addcoursepro">
+<!--                                                    <form action="/upload" method="post" class="dropzone dropzone-custom needsclick addlibrary" id="demo1-upload">-->
+                                                    <form method="post" id="edit_form" class="dropzone dropzone-custom needsclick addlibrary">
+                                                        {% csrf_token %}
+                                                        <div class="row">
+                                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                <div class="form-group">
+                                                                    <label class="control-label">{{ form.category_parent.label }}</label>
+																    {{ form.category_parent }}
+															    </div>
+                                                                <div class="form-group">
+                                                                    <label class="control-label">{{ form.name.label }}</label>
+                                                                    {{ form.name }}
+                                                                </div>
+<!--                                                                <div class="form-group alert-up-pd">-->
+<!--                                                                    <label class="control-label">Hình ảnh</label>-->
+<!--                                                                    <div class="dz-message needsclick download-custom">-->
+<!--                                                                        <i class="fa fa-download edudropnone" aria-hidden="true"></i>-->
+<!--                                                                        <h2 class="edudropnone">Drop image here or click to upload.</h2>-->
+<!--                                                                        <p class="edudropnone"><span class="note needsclick">(This is just a demo dropzone. Selected image is <strong>not</strong> actually uploaded.)</span>-->
+<!--                                                                        </p>-->
+<!--                                                                        <input name="imageico" class="hd-pro-img" type="text" />-->
+<!--                                                                    </div>-->
+<!--                                                                </div>-->
+                                                            </div>
+                                                        </div>
+<!--                                                        <div class="row">-->
+<!--                                                            <div class="col-lg-12">-->
+<!--                                                                <div class="payment-adress">-->
+<!--                                                                    <button type="submit" class="edit btn btn-primary waves-effect waves-light">Thêm</button>-->
+<!--                                                                </div>-->
+<!--                                                            </div>-->
+<!--                                                        </div>-->
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="product-tab-list tab-pane fade" id="reviews">
+                                    <div class="row">
+                                        <div class="add-product" style="float: right;">
+<!--                                                         <a href="javascript:someFunction()"><i class="fa fa-plus" aria-hidden="true"></i></a>-->
+                                            <button data-toggle="tooltip" title="Thêm" class="pd-setting-ed add-attr-btn"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                                            <button data-toggle="tooltip" title="Lưu" class="pd-setting-ed save-attr-btn"><i class="fa fa-save" aria-hidden="true"></i></button>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <div class="review-content-section">
+                                                <div class="row">
+                                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                        <div class="form-group">
+                                                            <h4>{{ form_attribute.attribute_groups_id.label }}</h4>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                        <div class="form-group">
+                                                            <h4 class="control-label">{{ form_attribute.name.label }}</h4>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row" id="attr-form">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <div class="review-content-section">
+                                                <div class="row attr-form check" id="check" style="display: none;">
+                                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                        <div class="form-group">
+                                                            {{ form_attribute.attribute_groups_id }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
+                                                        <div class="form-group">
+                                                            {{ form.attributes_id }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-12">
+                                                        <div class="form-group">
+                                                            <button data-toggle="tooltip" title="Xóa" class="pd-setting-ed remove-attr-btn"><i class="fa fa-remove" aria-hidden="true"></i></button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+<!--                                    <div class="row">-->
+<!--                                        <div class="col-lg-12">-->
+<!--                                            <div class="payment-adress">-->
+<!--                                                <button type="submit" class="btn btn-primary waves-effect waves-light">Thêm</button>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+                                </div>
+                                <div class="product-tab-list tab-pane fade" id="INFORMATION">
+                                    <div class="row">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <div class="review-content-section">
+												<div class="row">
+													<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+														<div class="devit-card-custom">
+															<div class="form-group">
+																<input type="url" class="form-control" placeholder="Facebook URL">
+															</div>
+															<div class="form-group">
+																<input type="url" class="form-control" placeholder="Twitter URL">
+															</div>
+															<div class="form-group">
+																<input type="url" class="form-control" placeholder="Google Plus">
+															</div>
+															<div class="form-group">
+																<input type="url" class="form-control" placeholder="Linkedin URL">
+															</div>
+															<button type="submit" class="btn btn-primary waves-effect waves-light">Submit</button>
+														</div>
+													</div>
+												</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endblock %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-copyright-area">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="footer-copy-right">
+                            <p>Copyright © 2018. All rights reserved. Template by <a href="https://colorlib.com/wp/templates/">Colorlib</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+{% endblock %}
+{% block javascript %}
+    <script src="{% static 'admin/js/dropzone/dropzone.js' %}"></script>
+<!-- chosen JS
+		============================================ -->
+    <script src="{% static 'admin/js/chosen/chosen.jquery.js' %}"></script>
+    <script src="{% static 'admin/js/chosen/chosen-active.js' %}"></script>
+    <!-- Select2 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+
+<!-- jQuery --> <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<!-- Select2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+
+{% block save-btn %}
+<script>
+     $(document).on('click','.save-attr-btn', function someFunction(e){
+       e.preventDefault();
+       values = [];
+       var select = document.getElementsByClassName("form-control tt");
+       for (let i = 0; i < select.length; i++) {
+          if ((select.length > 1) && (select[i].style.display != 'none')) {
+              values.push(select[i].value);
+          }
+       }
+       var check = 'False';
+       if ($(".check").css('display') != 'none'){
+          check = 'True';
+       }
+       $.ajax({
+               type: 'POST',
+               url: "/admin/category/edit",
+               data: {
+                  csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                  id: 1,
+                  category_parent: $("#id_category_parent").val(),
+                  name: $("#id_name").val(),
+                  attrs_id: values,
+                  check_add_attr: check,
+                  attributes_id: 0,
+               },
+               success: function (response) {
+                  if(response['message'] == '') {
+                       alert('Thêm thành công!');
+                       $("#edit_form").load("/admin/category/edit #edit_form");
+                  }
+                  else {
+                     alert(response['message']);
+                  }
+               },
+               error: function (response) {
+                  console.log(response)
+               }
+       });
+     });
+    </script>
+<!--{% endblock %}-->
+<script>
+     $(document).on('click','.add-attr-btn', function someFunction(e){
+     var select = document.getElementsByClassName("form-control tt");
+     att = document.getElementsByClassName("attr-form")[0];
+     if(att.style.display == 'none'){
+        att.style.display = "block";
+     }
+     else {
+       node = document.getElementsByClassName("attr-form")[0];
+       clone = node.cloneNode(true);
+       document.getElementById("reviews").appendChild(clone);
+     }
+<!--      if (select[select.length - 1].value == 'None') {-->
+<!--         alert('Vui lòng chọn thuộc tính!');-->
+<!--      }-->
+<!--      else {-->
+<!--         document.getElementById("reviews").appendChild(clone);-->
+<!--      }-->
+     });
+ </script>
+<script>
+     $(document).on('click','.remove-attr-btn', function someFunction(e){
+        $attrform = $(this).parent().parent().parent();
+        $all_attrform = $(".attr-form");
+        if ($all_attrform.length > 1){
+          $attrform.remove();
+         }
+        else {
+          $attrform.css("display", "none");
+        }
+     });
+ </script>
+<script>
+<!--    $(document).ready(function(){-->
+
+<!--  // Initialize select2-->
+<!--&lt;!&ndash;  $(".tt").select2();&ndash;&gt;-->
+<!--  $(".tt").prepend($('<option>', {-->
+<!--    value: 'None',-->
+<!--    text: '-&#45;&#45;&#45;&#45;None-&#45;&#45;&#45;&#45;'-->
+<!--  }));-->
+
+<!--  $(".t").prepend($('<option>', {-->
+<!--    value: 'None',-->
+<!--    text: '-&#45;&#45;&#45;&#45;None-&#45;&#45;&#45;&#45;'-->
+<!--  }));-->
+
+<!--  $(".tt").val('None');-->
+<!--  $(".t").val('None');-->
+<!--  $(".t").attr('disabled', 'disabled');-->
+
+<!--});-->
+</script>
+<script>
+    $(document).on('change','.tt', function() {
+       $row = $(this).parent().parent().parent();
+       $t = $row.find('.t');
+       $.ajax({
+               type: 'POST',
+               url: "/admin/category/attributes_attrgroups",
+               data: {
+                  csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                  id_attr: $(this).val(),
+               },
+               success: function (response) {
+                  $t.val(response['message']);
+               },
+               error: function (response) {
+                  console.log(response)
+               }
+       });
+     });
+</script>
+{% endblock%}

@@ -1,0 +1,204 @@
+{% extends "ad/base.html" %}
+{% block title %}
+    <title>Thuộc tính</title>
+{% endblock %}
+
+{% block breadcome-area %}
+{% endblock %}
+
+{% block content %}
+        <div class="product-status mg-b-15" style="padding-top: 100px;">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="product-status-wrap">
+                            <h4>
+<!--                                <i class="fa fa-pencil" aria-hidden="true"></i>-->
+                                Thuộc tính</h4>
+                            <div class="add-product">
+<!--                                <a href="#">Thêm</a>-->
+                            </div>
+                            <div class="asset-inner">
+                                <table id="mytable">
+                                    <tr>
+                                        <th>STT</th>
+                                        <th>{{ form.name.label }}</th>
+                                        <th>{{ form.attribute_groups_id.label }}</th>
+                                        <th>Thao tác</th>
+                                    </tr>
+                                    {% for c in attributes %}
+                                  <form method="post">
+                                    {% csrf_token %}
+                                    <tr>
+                                        <td class="id">{{ forloop.counter|add:0 }}
+                                            <input type="hidden" class="Id" value="{{ c.id }}">
+                                        </td>
+                                        <td class="name">{{ c.name }}</td>
+                                        <td>{{ c.attribute_groups_id.name }}
+                                            <input type="hidden" class="attribute_groups_Id" value="{{ c.attribute_groups_id.id }}">
+                                        </td>
+                                        <td>
+                                            <button data-toggle="tooltip" title="Sửa" class="pd-setting-ed edit-btn"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                                            <button data-toggle="tooltip" title="Xóa" class="pd-setting-ed delete-btn"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                  </form>
+                                  <form method="post">
+                                    {% csrf_token %}
+                                    <tr class="vd">
+                                        <td id="form_id" class="id"> </td>
+                                        <td>{{ form.name }}</td>
+                                        <td id="form_attg" >{{ form.attribute_groups_id }}</td>
+                                        <td>
+                                            <button data-toggle="tooltip" type="submit" title="Thêm" class="pd-setting-ed add-form"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                                        </td>
+                                    </tr>
+                                  </form>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+<!--        <div class="footer-copyright-area">-->
+<!--            <div class="container-fluid">-->
+<!--                <div class="row">-->
+<!--                    <div class="col-lg-12">-->
+<!--                        <div class="footer-copy-right">-->
+<!--                            <p>Copyright © 2018. All rights reserved. Template by <a href="https://colorlib.com/wp/templates/">Colorlib</a></p>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+{% endblock %}
+
+<!--Modal-->
+{% block modal-title %}<i class="fa fa-pencil" aria-hidden="true"></i> Cập nhật {% endblock %}
+{% block modal-content %}
+  <form method="post">
+   {% csrf_token %}
+   <div class="modal-body">
+       <div class="form-group p_name p_Id">
+             <label class="control-label">{{ form.name.label }}</label>
+             <input type="hidden" class="Id">
+             {{ form.name }}
+       </div>
+       <div class="form-group">
+           <label class="control-label">{{ form.attribute_groups_id.label }}</label>
+           {{ form.attribute_groups_id }}
+       </div>
+   </div>
+   <div class="modal-footer">
+       <button type="button" type="submit" class="btn btn-default edit" data-dismiss="modal">Đồng ý</button>
+   </div>
+  </form>
+{% endblock %}
+<!--End-Modal-->
+
+{% block javascript %}
+<script>
+    $(document).on('click','.add-form', function someFunction(e){
+       e.preventDefault();
+       var len = $('#mytable tr').length - 2;
+       var $tr = $("#mytable tr:eq("+len+")");
+       var $id = $tr.find(".id");
+       if ($id[0]){
+          var id_nb = parseInt($id.html()) + 1;
+       }
+       else {
+          var id_nb = 1;
+       }
+       var $name = $("#id_name");
+       var $attribute_groups_id = $("#id_attribute_groups_id").find(":selected").val();
+<!--       alert($("#id_attribute_groups_id").find(":selected").text());-->
+       $.ajax({
+               type: 'POST',
+               url: "/admin/attributes",
+               data: {
+                  csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                  id: id_nb,
+                  name: $name.val(),
+                  attribute_groups_id: parseInt($attribute_groups_id)
+               },
+               success: function (response) {
+                  if(response['message'] == '') {
+                       $("#mytable").load("/admin/attributes #mytable");
+                     }
+                  else {
+                     alert(response['message']);
+                  }
+               },
+               error: function (response) {
+                  console.log(response)
+               }
+         });
+     });
+</script>
+<script>
+    $(document).on('click','.delete-btn', function someFunction(e){
+       e.preventDefault();
+       var result = confirm("Bạn có chắc muốn xóa Thuộc tính này không?");
+       if (result) {
+       var $td = $(this).parent();
+       var $tr = $td.parent();
+       var $id = $tr.find(".Id");
+       $.ajax({
+               type: 'POST',
+               url: "/admin/attributes/delete=" + $id.val(),
+               success: function (response) {
+                   $("#mytable").load("/admin/attributes #mytable");
+                   alert('Xóa thành công!');
+               },
+               error: function (response) {
+                  console.log(response)
+               }
+         });
+        }
+     });
+</script>
+<script>
+    $(document).on('click','.edit-btn', function someFunction(e){
+       e.preventDefault();
+       var $td = $(this).parent();
+       var $tr = $td.parent();
+       var $name = $tr.find(".name");
+       var $id = $tr.find(".Id");
+       var $attribute_groups_id = $tr.find(".attribute_groups_Id");
+       $(".p_name #id_name").val($name.html());
+       $(".p_Id .Id").val($id.val());
+       $(".form-group #id_attribute_groups_id").val($attribute_groups_id.val());
+       $('#myModal').addClass('show');
+    });
+</script>
+<script>
+    $(document).on('click','.edit', function someFunction(e){
+       e.preventDefault();
+       $.ajax({
+               type: 'POST',
+               url: "/admin/attributes/update=" + $(".p_Id .Id").val(),
+               data: {
+                  csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                  id: $(".p_Id .Id").val(),
+                  name: $(".p_name #id_name").val(),
+                  attribute_groups_id: $(".form-group #id_attribute_groups_id").val()
+               },
+               success: function (response) {
+                  if (response['message'] == '') {
+                   alert('Cập nhật thành công!');
+                   $('#myModal').removeClass('show');
+                   $("#mytable").load("/admin/attributes #mytable");
+                   }
+                   else {
+                      alert(response['message']);
+                   }
+               },
+               error: function (response) {
+                  console.log(response)
+               }
+         });
+    });
+</script>
+{% endblock %}

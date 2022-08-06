@@ -1,0 +1,95 @@
+{% extends "ad/base.html" %}
+{% block title %}
+    <title>Danh mục</title>
+{% endblock %}
+
+{% block breadcome-area %}
+{% endblock %}
+
+{% block content %}
+        <div class="product-status mg-b-15" style="padding-top: 100px;">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="product-status-wrap">
+                            <h4>
+<!--                                <i class="fa fa-pencil" aria-hidden="true"></i>-->
+                                Danh mục</h4>
+                            <div class="add-product">
+                                <a href="/admin/category/edit">Thêm</a>
+                            </div>
+                            <div class="asset-inner">
+                                <table id="mytable">
+                                  <form method="post">
+                                    {% csrf_token %}
+                                    <tr>
+                                        <th>STT</th>
+                                        <th>Tên danh mục</th>
+                                        <th>Thao tác</th>
+                                    </tr>
+                                    {% for c in category_list %}
+                                    <tr>
+                                        <td>{{ forloop.counter|add:0 }}
+                                            <input type="hidden" class="Id" value="{{ c.id }}">
+                                        </td>
+                                        <td>{{ c.name }}</td>
+                                        <td>
+                                            <button formaction="/admin/category/update={{ c.id }}" data-toggle="tooltip" title="Sửa" class="pd-setting-ed"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                                            <button data-toggle="tooltip" title="Xóa" class="pd-setting-ed delete-btn"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                  </form>
+                                </table>
+                            </div>
+<!--                            <div class="custom-pagination">-->
+<!--								<ul class="pagination">-->
+<!--									<li class="page-item"><a class="page-link" href="#">Trước</a></li>-->
+<!--									<li class="page-item"><a class="page-link" href="#">1</a></li>-->
+<!--									<li class="page-item"><a class="page-link" href="#">2</a></li>-->
+<!--									<li class="page-item"><a class="page-link" href="#">3</a></li>-->
+<!--									<li class="page-item"><a class="page-link" href="#">Sau</a></li>-->
+<!--								</ul>-->
+<!--                            </div>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-copyright-area">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="footer-copy-right">
+                            <p>Copyright © 2018. All rights reserved. Template by <a href="https://colorlib.com/wp/templates/">Colorlib</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+{% endblock %}
+{% block javascript %}
+   <script>
+       $(document).on('click','.delete-btn', function someFunction(e){
+       e.preventDefault();
+       var result = confirm("Bạn có chắc muốn xóa Danh mục này không?");
+       if (result) {
+       var $td = $(this).parent();
+       var $tr = $td.parent();
+       var $id = $tr.find(".Id");
+       $.ajax({
+               type: 'POST',
+               url: "../../admin/category/delete=" + $id.val(),
+               success: function (response) {
+                   $("#mytable").load("/admin/category #mytable");
+                   alert('Xóa thành công!');
+               },
+               error: function (response) {
+                  console.log(response)
+               }
+         });
+        }
+     });
+   </script>
+{% endblock %}

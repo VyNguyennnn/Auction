@@ -1,0 +1,128 @@
+{% extends "website/base.html" %}
+{% load static %}
+{% block title %}
+    <title>Chọn danh mục</title>
+{% endblock %}
+{% block stylesheet%}
+   <!-- chosen CSS
+		============================================ -->
+    <link rel="stylesheet" href="{% static 'admin/css/chosen/bootstrap-chosen.css' %}">
+{% endblock %}
+
+{% block style-all-wrapper%} style = 'margin-left: 40px;'{% endblock %}
+    {% block header-seller%} class="header-top-area header-seller" {% endblock %}
+                                    {% block list-menu %}
+                                    <div class="col-lg-1 col-md-0 col-sm-1 col-xs-12">
+<!--                                        <div class="menu-switcher-pro">-->
+<!--                                            <button type="button" id="sidebarCollapse" class="btn bar-button-pro header-drl-controller-btn btn-info navbar-btn">-->
+<!--													<i class="educate-icon educate-nav"></i>-->
+<!--											</button>-->
+<!--                                        </div>-->
+                                    </div>
+                                    <div class="col-lg-6 col-md-7 col-sm-6 col-xs-12">
+                                        <div class="header-top-menu tabl-d-n">
+                                            <ul class="nav navbar-nav mai-top-nav">
+                                                <li class="nav-item"><a href="/home" class="nav-link">Trang chủ</a>
+                                                </li>
+                                                <li class="nav-item"><a href="/usr/0/history_bidding_list" class="nav-link">Lịch sử đặt giá</a>
+                                                </li>
+                                                <li class="nav-item"><a href="/seller/product" class="nav-link">Đơn hàng</a>
+                                                </li>
+                                                <li class="nav-item"><a href="/usr/0/message" class="nav-link">Tin nhắn</a>
+                                                </li>
+                                                <li class="nav-item"><a href="/usr/0/cancel/bid" class="nav-link">Trợ giúp</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    {% endblock %}
+{% block Start-Left-menu-area %}
+{% endblock %}
+
+{% block breadcome-area %}
+{% endblock %}
+
+{% block content %}
+<!-- dropdown search Start -->
+        <div class="row seller">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="sparkline10-list mg-tb-30 responsive-mg-t-0 table-mg-t-pro-n dk-res-t-pro-0 nk-ds-n-pro-t-0">
+                            <div class="sparkline10-hd">
+                                <div class="main-sparkline10-hd">
+                                    <h1>Danh mục sản phẩm</h1>
+                                </div>
+                            </div>
+                            <div class="sparkline10-graph">
+                                <div class="input-knob-dial-wrap">
+                                    <div class="row">
+                                       <form method="post" id="form-select-category">
+                                        {% csrf_token %}
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <div class="chosen-select-single mg-b-20">
+                                                <label>Vui lòng chọn danh mục cho sản phẩm của bạn.</label>
+                                                {{ form.category }}
+                                            </div>
+                                            <div class="payment-adress">
+                                                <button type="submit" formaction="/seller/product" class="btn btn-primary waves-effect waves-light">Tiếp tục</button>
+                                            </div>
+                                        </div>
+                                       </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+        </div>
+{% endblock %}
+
+{% block javascript %}
+<!-- chosen JS
+		============================================ -->
+    <script src="{% static 'admin/js/chosen/chosen.jquery.js' %}"></script>
+    <script src="{% static 'admin/js/chosen/chosen-active.js' %}"></script>
+<!--<script src="{% static 'admin/js/vendor/jquery-1.12.4.min.js' %}"></script>-->
+<script>
+    $('#form-select-category').on('submit',function someFunction(e){
+<!--       e.preventDefault();-->
+<!--       var form = $(this)[0];-->
+<!--       var dt = new FormData(form);-->
+<!--       $.ajax({-->
+<!--               type: 'POST',-->
+<!--               url: "/seller/detail_product",-->
+<!--               data: dt,-->
+<!--               cache: false,-->
+<!--               processData: false,-->
+<!--               contentType: false,-->
+<!--               success: function (response) {-->
+<!--                  $( 'body' ).load( "/seller/detail_product_form");-->
+<!--&lt;!&ndash;                  location.replace('/seller/detail_product_form');&ndash;&gt;-->
+<!--               },-->
+<!--               error: function (response) {-->
+<!--&lt;!&ndash;                  console.log(response)&ndash;&gt;-->
+<!--               }-->
+<!--        });-->
+<!--    });-->
+</script>
+<script>
+    $(document).ready(function someFunction(e){
+       e.preventDefault();
+       var form = $('#form-select-category')[0];
+       var dt = new FormData(form);
+       $.ajax({
+               type: 'POST',
+               url: "/seller/product",
+               data: dt,
+               cache: false,
+               processData: false,
+               contentType: false,
+               success: function (response) {
+                  alert(response['message']);
+                  $("#id_category").attr('disabled', 'disabled');
+               },
+               error: function (response) {
+<!--                  console.log(response)-->
+               }
+        });
+    });
+</script>
+{% endblock %}

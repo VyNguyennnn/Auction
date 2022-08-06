@@ -1,0 +1,127 @@
+{% extends "website/base.html" %}
+{% load static %}
+{% block title %}
+    <title>Lịch sử đấu giá</title>
+{% endblock %}
+
+{% block stylesheet %}
+<!-- normalize CSS
+		============================================ -->
+    <link rel="stylesheet" href="{% static 'admin/css/data-table/bootstrap-table.css' %}">
+    <link rel="stylesheet" href="{% static 'admin/css/data-table/bootstrap-editable.css' %}">
+{% endblock %}
+
+
+{% block content %}
+        <!-- Static Table Start -->
+        <div class="static-table-area">
+            <div class="container-fluid">
+                <div class="sparkline8-list">
+                            <div class="sparkline8-hd">
+                                <div class="main-sparkline8-hd">
+                                    <h1>Mã phòng <i>{{room_id}}</i>
+                                        <input type="hidden" value="{{room_id}}" id="room_id">
+                                        <a href="/room/{{room_id}}" style="float: right; background-color: #006df0;; border: none; color: white; padding: 5px 10px; border-radius: 3px;
+                                                 transition: all .4s ease 0s;
+                                                 font-size: 14px; margin-right: 5px;">Đến phòng
+                                        </a>
+                                        </a>
+                                    </h1>
+                                </div>
+                            </div>
+                            <div class="sparkline8-graph">
+                                <div class="static-table-list">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>Người bán</th>
+                                                <th>Bắt đầu</th>
+                                                <th>Kết thúc</th>
+                                                <th>Giá đã đặt</th>
+                                                <th>Tình trạng</th>
+                                            </tr>
+                                        </thead>
+                                        {% for r in room %}
+                                        <tbody>
+                                          <form method="post">
+                                            {% csrf_token %}
+                                            <tr>
+                                                <td></td>
+                                                <td>{{r.room_id.seller_id.pk}}</td>
+                                                <td>{{r.room_id.start|date:"d/m/Y H:m"}}</td>
+                                                <td>{{r.room_id.end|date:"d/m/Y H:m"}}</td>
+                                                <td>{{r.bids}}</td>
+                                                <td>{{r.room_id.status}}
+                                            </tr>
+                                          </form>
+                                        </tbody>
+                                        {% endfor %}
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+            </div>
+        </div>
+        <!-- Static Table End -->
+
+<!--</div>-->
+{% endblock %}
+
+<!--Modal-->
+{% block modal-title %}<i class="fa fa-pencil" aria-hidden="true"></i> Cập nhật {% endblock %}
+{% block modal-content %}
+  <form method="post">
+   {% csrf_token %}
+   <div class="modal-body">
+       <div class="form-group p_Id p_name">
+             <label class="control-label">{{ form.name.label }}</label>
+             <input type="hidden" class="Id">
+             {{ form.name }}
+       </div>
+   </div>
+   <div class="modal-footer">
+       <button type="button" type="submit" class="btn btn-default edit" data-dismiss="modal">Đồng ý</button>
+   </div>
+  </form>
+{% endblock %}
+<!--End-Modal-->
+
+{% block javascript %}
+    <!-- data table JS
+		============================================ -->
+    <script src="{% static 'admin/js/data-table/bootstrap-table.js' %}"></script>
+    <script src="{% static 'admin/js/data-table/tableExport.js' %}"></script>
+    <script src="{% static 'admin/js/data-table/data-table-active.js' %}"></script>
+    <script src="{% static 'admin/js/data-table/bootstrap-table-editable.js' %}"></script>
+    <script src="{% static 'admin/js/data-table/bootstrap-editable.js' %}"></script>
+    <script src="{% static 'admin/js/data-table/bootstrap-table-resizable.js' %}"></script>
+    <script src="{% static 'admin/js/data-table/colResizable-1.5.source.js' %}"></script>
+    <script src="{% static 'admin/js/data-table/bootstrap-table-export.js' %}"></script>
+    <!--  editable JS
+		============================================ -->
+    <script src="{% static 'admin/js/editable/jquery.mockjax.js' %}"></script>
+    <script src="{% static 'admin/js/editable/mock-active.js' %}"></script>
+    <script src="{% static 'admin/js/editable/select2.js' %}"></script>
+    <script src="{% static 'admin/js/editable/moment.min.js' %}"></script>
+    <script src="{% static 'admin/js/editable/bootstrap-datetimepicker.js' %}"></script>
+    <script src="{% static 'admin/js/editable/bootstrap-editable.js' %}"></script>
+    <script src="{% static 'admin/js/editable/xediable-active.js' %}"></script>
+    <!-- Chart JS
+		============================================ -->
+    <script src="{% static 'admin/js/chart/jquery.peity.min.js' %}"></script>
+    <script src="{% static 'admin/js/peity/peity-active.js' %}"></script>
+    <!-- tab JS
+		============================================ -->
+    <script src="{% static 'admin/js/tab.js' %}"></script>
+    <!-- plugins JS
+		============================================ -->
+    <script src="{% static 'admin/js/plugins.js' %}"></script>
+    <!-- main JS
+		============================================ -->
+    <script src="{% static 'admin/js/main.js' %}"></script>
+<!--    &lt;!&ndash; tawk chat JS-->
+<!--		============================================ &ndash;&gt;-->
+<!--    <script src="{% static 'admin/js/tawk-chat.js' %}"></script>-->
+
+{% endblock %}

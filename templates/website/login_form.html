@@ -1,0 +1,40 @@
+{% extends "ad/login_form.html" %}
+{% load socialaccount %}
+
+{% block btn %}
+<a class="btn btn-default btn-block" href="{% provider_login_url 'google' action='reauthenticate' user='user' %}">Đăng ký</a>
+{% endblock %}
+
+{% block javascript %}
+    <script>
+    $("#loginForm").submit(function (e) {
+        e.preventDefault();
+        $.ajax({
+               type: 'POST',
+               url: "/",
+               data: {
+                    account: $("#username").val(),
+                    password: $("#password").val()
+               },
+               success: function (response) {
+               if (response['kq'] == '0') {
+                    $("#message").text('Tài khoản hoặc mật khẩu không chính xác!');
+                    var z = $("#message").text();
+               }
+               else if (response['kq'] == 'redirect') {
+                    alert('Tài khoản của bạn đã bị khóa!');
+               }
+               else {
+                    window.location='/usr/0/information';
+                   }
+               },
+               error: function () {
+<!--                  console.log(response)-->
+               }
+        });
+    });
+    </script>
+{% endblock %}
+</body>
+
+</html>

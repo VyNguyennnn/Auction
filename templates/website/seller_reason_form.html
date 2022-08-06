@@ -1,0 +1,28 @@
+<div class="container-fluid" id="reason_form">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="sparkline10-list mg-tb-30 responsive-mg-t-0 table-mg-t-pro-n dk-res-t-pro-0 nk-ds-n-pro-t-0">
+                            <div class="sparkline10-hd" style="background-color: #006df038; text-align: center; padding: 10px;">
+                                <div class="main-sparkline10-hd">
+                                    <h1 style="color: #337ab7;">HỦY GIÁ ĐÃ ĐẶT</h1>
+                                </div>
+                            </div>
+                            <div class="sparkline10-graph" style="padding: 40px 200px 0px 200px;">
+                                <p><b>Sản phẩm:</b> {{room.product_id.name}}</p>
+                                <p><b>Mã sản phẩm:</b> {{room.product_id.pk}}</p>
+                            </div>
+                            <div class="sparkline10-graph" style="padding: 40px 200px 0px 200px;">
+                                <p><b>Tài khoản đặt giá: </b><input type="text" id="bidder"></p>
+                            </div>
+                            <div class="sparkline10-graph" style="padding: 40px 200px 0px 200px;">
+                                <p>Chọn các lý do sau đây:</p>
+                                <input id='room_id_reason_form' type="hidden" value="{{room.pk}}">
+                                <button type="button" class="btn btn-out btn-square btn-reason" value="Tôi đã nhập sai giá tiền" style="margin-bottom: 10px; width: 100%; background-color: #dddddd40; padding: 10px; border-color: white;">Tôi đã nhập sai giá tiền</button>
+                                <button type="button" class="btn btn-out btn-square btn-reason" value="Mô tả sản phẩm có sự thay đổi sau khi tôi đặt giá" style="margin-bottom: 10px; width: 100%; background-color: #dddddd40; padding: 10px; border-color: white;">Mô tả sản phẩm có sự thay đổi sau khi tôi đặt giá</button>
+                                <button type="button" class="btn btn-out btn-square btn-reason" value="Tôi không thể liên hệ với người bán" style="margin-bottom: 10px; width: 100%; background-color: #dddddd40; padding: 10px; border-color: white;">Tôi không thể liên hệ với người bán</button>
+                                <button type="button" class="btn btn-out btn-square btn-reason" value="Lý do khác" style="margin-bottom: 10px; width: 100%; background-color: #dddddd40; padding: 10px; border-color: white;">Lý do khác</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+</div>

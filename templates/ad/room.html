@@ -1,0 +1,153 @@
+{% extends "ad/base.html" %}
+{% load static %}
+{% load filter %}
+{% block title %}
+    <title>Danh sách phòng đấu giá</title>
+{% endblock %}
+
+{% block stylesheet %}
+<!-- normalize CSS
+		============================================ -->
+    <link rel="stylesheet" href="{% static 'admin/css/data-table/bootstrap-table.css' %}">
+    <link rel="stylesheet" href="{% static 'admin/css/data-table/bootstrap-editable.css' %}">
+{% endblock %}
+
+{% block search %}
+{% endblock %}
+
+{% block link %}
+   <ul class="breadcome-menu">
+       <li><a href="#">Trang chủ</a> <span class="bread-slash">/</span>
+       </li>
+       <li><span class="bread-blod">Danh sách phòng</span>
+       </li>
+   </ul>
+{% endblock %}
+
+
+
+
+{% block content %}
+        <!-- Static Table Start -->
+        <div class="static-table-area">
+            <div class="container-fluid">
+                <div class="sparkline8-list">
+                            <div class="sparkline8-hd">
+                                <div class="main-sparkline8-hd">
+                                    <h1>Danh sách phòng đấu giá</h1>
+                                </div>
+                            </div>
+                            <div class="sparkline8-graph">
+                                <div class="static-table-list">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>Mã phòng</th>
+                                                <th>Người bán</th>
+                                                <th>Số người tham gia</th>
+                                                <th>Bắt đầu</th>
+                                                <th>Kết thúc</th>
+                                                <th>Giá hiện tại</th>
+                                                <th>Tình trạng</th>
+                                                <th>Lịch sử đặt giá</th>
+                                            </tr>
+                                        </thead>
+                                        {% for r in room %}
+                                        <tbody>
+                                          <form method="post">
+                                            {% csrf_token %}
+                                            <tr>
+                                                <td></td>
+                                                <td><a href="/room/{{r.pk}}">{{r.pk}}</a></td>
+                                                <td>{{r.seller_id.pk}}</td>
+                                                <td>{{r.quantity_of_bidder}}</td>
+                                                <td>{{r.start|date:"d/m/Y H:m"}}</td>
+                                                <td>{{r.end|date:"d/m/Y H:m"}}</td>
+                                                <td>{{r.current_bid}}</td>
+                                                <td>{{r.status}}</td>
+                                                <td id="his_bid"><a href="/admin/room/history_bidding/{{r.pk}}" style="color: blue;">Xem</a></td>
+                                            </tr>
+                                            <input type="hidden" value="{{c.pk}}" class="id">
+                                          </form>
+                                        </tbody>
+                                        {% endfor %}
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+            </div>
+        </div>
+        <!-- Static Table End -->
+
+<!--</div>-->
+{% endblock %}
+
+
+{% block javascript %}
+
+<!-- dictrict
+		============================================ -->
+    <script src="{% static 'admin/js/district.min.js' %}"></script>
+    <!-- data table JS
+		============================================ -->
+    <script src="{% static 'admin/js/data-table/bootstrap-table.js' %}"></script>
+    <script src="{% static 'admin/js/data-table/tableExport.js' %}"></script>
+    <script src="{% static 'admin/js/data-table/data-table-active.js' %}"></script>
+    <script src="{% static 'admin/js/data-table/bootstrap-table-editable.js' %}"></script>
+    <script src="{% static 'admin/js/data-table/bootstrap-editable.js' %}"></script>
+    <script src="{% static 'admin/js/data-table/bootstrap-table-resizable.js' %}"></script>
+    <script src="{% static 'admin/js/data-table/colResizable-1.5.source.js' %}"></script>
+    <script src="{% static 'admin/js/data-table/bootstrap-table-export.js' %}"></script>
+    <!--  editable JS
+		============================================ -->
+    <script src="{% static 'admin/js/editable/jquery.mockjax.js' %}"></script>
+    <script src="{% static 'admin/js/editable/mock-active.js' %}"></script>
+    <script src="{% static 'admin/js/editable/select2.js' %}"></script>
+    <script src="{% static 'admin/js/editable/moment.min.js' %}"></script>
+    <script src="{% static 'admin/js/editable/bootstrap-datetimepicker.js' %}"></script>
+    <script src="{% static 'admin/js/editable/bootstrap-editable.js' %}"></script>
+    <script src="{% static 'admin/js/editable/xediable-active.js' %}"></script>
+    <!-- Chart JS
+		============================================ -->
+    <script src="{% static 'admin/js/chart/jquery.peity.min.js' %}"></script>
+    <script src="{% static 'admin/js/peity/peity-active.js' %}"></script>
+    <!-- tab JS
+		============================================ -->
+    <script src="{% static 'admin/js/tab.js' %}"></script>
+    <!-- plugins JS
+		============================================ -->
+    <script src="{% static 'admin/js/plugins.js' %}"></script>
+    <!-- main JS
+		============================================ -->
+    <script src="{% static 'admin/js/main.js' %}"></script>
+
+<script>
+var dict = [];
+$(document).on('click', '#cancel_bid', function(e){
+   e.preventDefault();
+   p = $(this).parent().parent();
+   id = p.find('.id');
+   $.ajax({
+               type: 'POST',
+               url: "/usr/cancel_bid",
+               data: {
+                  csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                  id: id.val(),
+               },
+               success: function (response) {
+                  if(response['message'] == '') {
+                       alert('Hủy giá thành công!');
+                  }
+                  else {
+                     alert(response['message']);
+                  }
+               },
+               error: function (response) {
+                  console.log(response)
+               }
+       });
+});
+</script>
+
+{% endblock %}

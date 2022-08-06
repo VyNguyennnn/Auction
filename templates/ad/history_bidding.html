@@ -1,0 +1,148 @@
+{% extends "ad/base.html" %}
+{% load static %}
+{% load filter %}
+{% block title %}
+    <title>Lịch sử đặt giá</title>
+{% endblock %}
+
+{% block stylesheet %}
+<!-- normalize CSS
+		============================================ -->
+    <link rel="stylesheet" href="{% static 'admin/css/data-table/bootstrap-table.css' %}">
+    <link rel="stylesheet" href="{% static 'admin/css/data-table/bootstrap-editable.css' %}">
+{% endblock %}
+
+{% block search %}
+{% endblock %}
+
+{% block link %}
+   <ul class="breadcome-menu">
+       <li><a href="#">Trang chủ</a> <span class="bread-slash">/</span>
+       </li>
+       <li><span class="bread-blod">Danh sách phòng</span>
+       </li>
+   </ul>
+{% endblock %}
+
+{% block content %}
+        <!-- Static Table Start -->
+        <div class="static-table-area">
+            <div class="container-fluid">
+                <div class="sparkline8-list">
+                            <div class="sparkline8-hd">
+                                <div class="main-sparkline8-hd">
+                                    <h1>Lịch sử đặt giá</h1>
+                                </div>
+                            </div>
+                            <div class="sparkline8-graph">
+                                <div class="static-table-list" style="overflow-x: auto; overflow-y: auto; height: 100%;">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>Mã phòng</th>
+                                                <th>Người bán</th>
+                                                <th>Giá đặt</th>
+                                                <th>Thời gian đặt giá</th>
+                                                <th>Trạng thái</th>
+                                            </tr>
+                                        </thead>
+                                        {% for c in his_bid %}
+                                        <tbody>
+                                          <form method="post">
+                                            {% csrf_token %}
+                                            <tr>
+                                                <td></td>
+                                                <td><a href="/room/{{c.room_id.pk}}">{{c.room_id.pk}}</a></td>
+                                                <td>{{c.room_id.seller_id.pk}}</td>
+                                                <td>{{c.bids}}</td>
+                                                {% if c.time|date:"d/m/Y" == timenow|date:"d/m/Y" %}
+                                                <td>Hôm nay, {{c.time|date:"H:m"}}</td>
+                                                {% else %}
+                                                <td>{{c.time|date:"d/m/Y, H:m"}}</td>
+                                                {% endif %}
+                                                <td>{{c.room_id.status}}</td>
+                                            </tr>
+                                            <input type="hidden" value="{{c.pk}}" class="id">
+                                          </form>
+                                        </tbody>
+                                        {% endfor %}
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+            </div>
+        </div>
+        <!-- Static Table End -->
+
+<!--</div>-->
+{% endblock %}
+
+
+{% block javascript %}
+
+<!-- dictrict
+		============================================ -->
+    <script src="{% static 'admin/js/district.min.js' %}"></script>
+    <!-- data table JS
+		============================================ -->
+    <script src="{% static 'admin/js/data-table/bootstrap-table.js' %}"></script>
+    <script src="{% static 'admin/js/data-table/tableExport.js' %}"></script>
+    <script src="{% static 'admin/js/data-table/data-table-active.js' %}"></script>
+    <script src="{% static 'admin/js/data-table/bootstrap-table-editable.js' %}"></script>
+    <script src="{% static 'admin/js/data-table/bootstrap-editable.js' %}"></script>
+    <script src="{% static 'admin/js/data-table/bootstrap-table-resizable.js' %}"></script>
+    <script src="{% static 'admin/js/data-table/colResizable-1.5.source.js' %}"></script>
+    <script src="{% static 'admin/js/data-table/bootstrap-table-export.js' %}"></script>
+    <!--  editable JS
+		============================================ -->
+    <script src="{% static 'admin/js/editable/jquery.mockjax.js' %}"></script>
+    <script src="{% static 'admin/js/editable/mock-active.js' %}"></script>
+    <script src="{% static 'admin/js/editable/select2.js' %}"></script>
+    <script src="{% static 'admin/js/editable/moment.min.js' %}"></script>
+    <script src="{% static 'admin/js/editable/bootstrap-datetimepicker.js' %}"></script>
+    <script src="{% static 'admin/js/editable/bootstrap-editable.js' %}"></script>
+    <script src="{% static 'admin/js/editable/xediable-active.js' %}"></script>
+    <!-- Chart JS
+		============================================ -->
+    <script src="{% static 'admin/js/chart/jquery.peity.min.js' %}"></script>
+    <script src="{% static 'admin/js/peity/peity-active.js' %}"></script>
+    <!-- tab JS
+		============================================ -->
+    <script src="{% static 'admin/js/tab.js' %}"></script>
+    <!-- plugins JS
+		============================================ -->
+    <script src="{% static 'admin/js/plugins.js' %}"></script>
+    <!-- main JS
+		============================================ -->
+    <script src="{% static 'admin/js/main.js' %}"></script>
+
+<script>
+var dict = [];
+$(document).on('click', '#cancel_bid', function(e){
+   e.preventDefault();
+   p = $(this).parent().parent();
+   id = p.find('.id');
+   $.ajax({
+               type: 'POST',
+               url: "/usr/cancel_bid",
+               data: {
+                  csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                  id: id.val(),
+               },
+               success: function (response) {
+                  if(response['message'] == '') {
+                       alert('Hủy giá thành công!');
+                  }
+                  else {
+                     alert(response['message']);
+                  }
+               },
+               error: function (response) {
+                  console.log(response)
+               }
+       });
+});
+</script>
+
+{% endblock %}

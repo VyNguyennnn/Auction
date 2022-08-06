@@ -1,0 +1,20 @@
+<div class="row" id="list_product">
+                    {% for r in room %}
+                    {% if r.status == 'opening' %}
+                    <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 room" style="display: none; text-align: center;">
+                        <div class="courses-inner res-mg-t-30 dk-res-t-pro-30">
+                            <div class="courses-title">
+                                <a href="#"><img src="{{ r.product_id.image.0.url }}" alt=""></a>
+                                <h2 class="room_name">{{ r.product_id.name|truncatechars:40 }}</h2>
+                            </div>
+                            <div class="product-buttons">
+                                <form method="post">
+                                  {% csrf_token %}
+                                  <button type="button" class='btn-select' value="{{ r.pk }}" class="button-default cart-btn">Chọn</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>

@@ -1,0 +1,57 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+  <div class="modal fade" id="myModal" role="dialog">
+     <div class="modal-dialog">
+         <div class="card">
+             <div class="text-right cross"> <i class="fa fa-times"></i> </div>
+             <div class="card-body text-center"> <img src="https://img.icons8.com/bubbles/200/000000/trophy.png">
+                 <h4>Lets talk!</h4>
+                 <p>You have been personally selected to take part in our 2017 annual visitors survey!</p> <button class="btn btn-out btn-square continue">CONTINUE</button>
+             </div>
+             <form id="form" method="post">
+                 {% csrf_token %}
+<!--                 <input type="text" name="message"/>-->
+             </form>
+<!--             <div id="messages">-->
+
+<!--             </div>-->
+         </div>
+     </div>
+  </div>
+  <!-- jquery
+		============================================ -->
+    <script src="{% static 'admin/js/vendor/jquery-1.12.4.min.js' %}"></script>
+<!--  <script>-->
+<!--      let url = 'ws://127.0.0.1:8000/ws/socket-server/';-->
+<!--&lt;!&ndash;      alert(url);&ndash;&gt;-->
+<!--      var chatSocket = new WebSocket(url);-->
+
+<!--      chatSocket.onmessage = function(e){-->
+<!--          let data = JSON.parse(e.data);-->
+<!--          console.log('Data:', data);-->
+
+<!--          if(data.type === 'chat'){-->
+<!--             let messages = document.getElementById('messages');-->
+<!--             let m = data.message;-->
+<!--             messages.insertAdjacentHTML('beforeend', '<div><p>' + m + '</p></div>')-->
+<!--          }-->
+<!--      };-->
+<!--      let form = document.getElementById('form');-->
+<!--      form.addEventListener('submit', function(e){-->
+<!--          e.preventDefault();-->
+<!--          let message = e.target.message.value;-->
+
+<!--          chatSocket.send(JSON.stringify({-->
+<!--             'message': message-->
+<!--          }));-->
+<!--          form.reset();-->
+<!--      });-->
+<!--  </script>-->
+</body>
+</html>
